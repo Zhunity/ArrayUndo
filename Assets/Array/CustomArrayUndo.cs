@@ -1,11 +1,14 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[System.Serializable]
-public class CustomArray<T>
+[Serializable]
+public class CustomArray<T> // 带了泛型就显示不出来了。。。
 {
+	[SerializeField]
 	public T[] Array;
+
 	public T this[int index]
 	{
 		get
@@ -13,6 +16,7 @@ public class CustomArray<T>
 			return Array[index];
 		}
 	}
+
 	public CustomArray()
 	{
 		this.Array = new T[4];
@@ -26,4 +30,6 @@ public class CustomArray<T>
 
 public class CustomArrayUndo : MonoBehaviour
 {
+	[SerializeField]
+	public CustomArray<int> a = new CustomArray<int>();	// 显示不出来。。。
 }
