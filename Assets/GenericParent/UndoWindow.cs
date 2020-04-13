@@ -19,40 +19,44 @@ public class UndoWindow<T> : GenericWindow<ArrayUndo<T>>
 		array = GameObject.FindObjectOfType<ArrayUndo<T>>();
 	}
 
-	public void OnGUI()
+	private void OnGUI()
 	{
 		GUILayout.Space(5);
 
 		array = (ArrayUndo<T>)EditorGUILayout.ObjectField(array, typeof(ArrayUndo<T>), true);
 
 		GUILayout.Label("Current value");
-		GUILayout.Label("value: " + value.ToString());
+		ShowValue();
 
 		ChangeValue();
 
 		if (GUILayout.Button("Apply", GUILayout.Height(20)))
 		{
-			ApplyVertexFactors(value);
+			if (array == null)
+				return;
+
+			Undo.RecordObject(array, "Modify Vertices");
+
+			ApplyVertexFactors();
 		}
+	}
+
+	protected virtual void ShowValue()
+	{
+		GUILayout.Label("value: " + value);
 	}
 
 	protected virtual void ChangeValue()
 	{
 	}
 
-	public void ApplyVertexFactors(T factor)
+	protected virtual void ApplyVertexFactors()
 	{
-		if (array == null)
-			return;
-
-
-		Undo.RecordObject(array, "Modify Vertices");
-
-		array.Add(factor);
+		array.Add(value);
 		array.Log();
 	}
 
-	private void UndoRedoCallback()
+	protected virtual void UndoRedoCallback()
 	{
 		if (array == null)
 		{
@@ -61,6 +65,7 @@ public class UndoWindow<T> : GenericWindow<ArrayUndo<T>>
 
 		T[] copy = array.array;
 		array.array = copy;
-		array.index = array.index;
+		int index = array.index;
+		array.index = index;
 	}
 }
