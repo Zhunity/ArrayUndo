@@ -22,7 +22,7 @@ public abstract class ArrayUndo<T> : MonoBehaviour
 		array[i] = value;
 	}
 
-	public void Log()
+	public virtual void Log()
 	{
 		for(int i = 0; i < array.Length; i ++)
 		{
